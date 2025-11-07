@@ -1,0 +1,62 @@
+[project]
+name = "network-tools"
+description = "Unified toolkit for NetAlly/Layer2 discovery capture, JSON parsing, and PCAP filtering."
+authors = [
+    { name = "Kris Armstrong", email = "kris.armstrong@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.14"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: System :: Networking",
+]
+dependencies = [
+    "rich>=13.7",
+    "scapy>=2.5",
+]
+
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.3",
+    "pytest-mock>=3.14",
+    "coverage[toml]>=7.4",
+]
+dev = [
+    "nox>=2024.4.15",
+]
+
+[project.urls]
+Homepage = "https://github.com/krisarmstrong/network-tools"
+"Bug Tracker" = "https://github.com/krisarmstrong/network-tools/issues"
+
+[project.scripts]
+network-tools = "network_tools.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/network_tools/_version.py"
+fallback_version = "0.0.0"
+
+[tool.pytest.ini_options]
+addopts = "-ra --showlocals"
+testpaths = ["network_tools/tests"]
+
+[tool.coverage.run]
+source = ["network_tools"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true

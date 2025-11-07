@@ -5,7 +5,7 @@ authors = [
     { name = "Kris Armstrong", email = "kris.armstrong@example.com" }
 ]
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: System Administrators",
@@ -51,7 +51,7 @@ fallback_version = "0.0.0"
 
 [tool.pytest.ini_options]
 addopts = "-ra --showlocals"
-testpaths = ["network_tools/tests"]
+testpaths = ["tests"]
 
 [tool.coverage.run]
 source = ["network_tools"]

@@ -41,3 +41,46 @@ The repo ships with `nox -s tests` and `.github/workflows/ci.yml`; versions are 
 ## Packet Performance Listener
 The original C-based high-performance listener from `packet_listener_linux_perf_test` is preserved under
 `extras/packet_listener_linux/`. Build with `cmake` or `gcc` on Linux hosts when you need raw-socket throughput testing.
+
+## WiFi Analysis
+
+Comprehensive Wi-Fi packet parsing and analysis capabilities (merged from wi-fi-packet-parser).
+
+### Features
+- PCAP file parsing
+- Wi-Fi frame analysis
+- OUI lookup and vendor identification
+- Channel and signal strength analysis
+
+## Switch Management
+
+Network switch port querying and management (merged from switch-port-query).
+
+### Features
+- SNMP-based port queries
+- Port configuration management
+- VLAN information retrieval
+- PoE status monitoring
+
+## Network Monitoring
+
+TCP connectivity monitoring tools (merged from tping-monitor).
+
+### Features
+- TCP ping (tcping) functionality
+- Continuous network monitoring
+- Connection latency tracking
+- Availability reporting
+
+## Documentation
+
+- [WiFi Packet Parser](docs/WIFI_PARSER.md)
+- [Switch Port Query](docs/SWITCH_QUERY.md)
+- [TCP Ping Monitor](docs/TPING_MONITOR.md)
+
+---
+
+Enhanced from:
+- wi-fi-packet-parser
+- switch-port-query
+- tping-monitor

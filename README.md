@@ -1,5 +1,10 @@
 # network-tools
 
+[![CI](https://github.com/krisarmstrong/network-tools/workflows/CI/badge.svg)](https://github.com/krisarmstrong/network-tools/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 Everything from `network_discovery`, `network_discovery_listener`, `network_discovery_parser`,
 `pcap_parser`, and `packet_listener_linux_perf_test` now lives here.
 

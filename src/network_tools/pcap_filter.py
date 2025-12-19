@@ -16,7 +16,9 @@ def _scapy():  # pragma: no cover
         from scapy.layers.inet import IP, TCP, UDP
         from scapy.packet import Raw
     except Exception as exc:
-        raise RuntimeError("scapy is required for PCAP filtering. Install network-tools with its default dependencies.") from exc
+        raise RuntimeError(
+            "scapy is required for PCAP filtering. Install network-tools with its default dependencies."
+        ) from exc
     return rdpcap, Ether, IP, TCP, UDP, Raw
 
 
@@ -51,8 +53,16 @@ def filter_pcap(input_path: Path, output_path: Path) -> None:  # pragma: no cove
                 continue
             src_ip = pkt[IP].src if pkt.haslayer(IP) else "N/A"
             dst_ip = pkt[IP].dst if pkt.haslayer(IP) else "N/A"
-            src_port = pkt[TCP].sport if pkt.haslayer(TCP) else pkt[UDP].sport if pkt.haslayer(UDP) else None
-            dst_port = pkt[TCP].dport if pkt.haslayer(TCP) else pkt[UDP].dport if pkt.haslayer(UDP) else None
+            src_port = (
+                pkt[TCP].sport
+                if pkt.haslayer(TCP)
+                else pkt[UDP].sport if pkt.haslayer(UDP) else None
+            )
+            dst_port = (
+                pkt[TCP].dport
+                if pkt.haslayer(TCP)
+                else pkt[UDP].dport if pkt.haslayer(UDP) else None
+            )
             if TARGET_PORT not in (src_port, dst_port):
                 continue
             payload = pkt[Raw].load.hex() if pkt.haslayer(Raw) else ""

@@ -40,6 +40,14 @@ def count_valid_ipv4(hosts: List[Dict[str, Any]]) -> int:
 def format_host(host: Dict[str, Any], index: int) -> str:
     data = host.get("host", {})
     lines = [f"Host {index}:"]
-    for field in ("host_id", "mac_address", "ip_v4_address", "ip_v4_subnet", "ip_v6_address", "mdns_name", "user_name"):
+    for field in (
+        "host_id",
+        "mac_address",
+        "ip_v4_address",
+        "ip_v4_subnet",
+        "ip_v6_address",
+        "mdns_name",
+        "user_name",
+    ):
         lines.append(f"  {field}: {data.get(field, 'N/A')}")
     return "\n".join(lines)

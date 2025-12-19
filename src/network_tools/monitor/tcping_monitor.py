@@ -35,11 +35,20 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Monitor TCP response times to specified hosts.")
-    parser.add_argument("--method", choices=["python", "tcping"], default=DEFAULT_METHOD, help="Method: 'python' or 'tcping'")
-    parser.add_argument("--interval", type=int, default=DEFAULT_INTERVAL, help="Time in seconds between checks")
+    parser.add_argument(
+        "--method",
+        choices=["python", "tcping"],
+        default=DEFAULT_METHOD,
+        help="Method: 'python' or 'tcping'",
+    )
+    parser.add_argument(
+        "--interval", type=int, default=DEFAULT_INTERVAL, help="Time in seconds between checks"
+    )
     return parser.parse_args()
+
 
 def check_tcp_python(host: str, port: int = 80, timeout: float = 3.0) -> Optional[float]:
     start = time.time()
@@ -50,9 +59,12 @@ def check_tcp_python(host: str, port: int = 80, timeout: float = 3.0) -> Optiona
         logger.error("Python TCP check failed for %s: %s", host, str(e))
         return None
 
+
 def check_tcp_tcping(host: str) -> Optional[float]:
     try:
-        result = subprocess.run(["tcping", host, "-n", "1"], capture_output=True, text=True, timeout=10)
+        result = subprocess.run(
+            ["tcping", host, "-n", "1"], capture_output=True, text=True, timeout=10
+        )
         if result.returncode == 0 and "time=" in result.stdout:
             for line in result.stdout.splitlines():
                 if "time=" in line:
@@ -61,13 +73,18 @@ def check_tcp_tcping(host: str) -> Optional[float]:
         logger.error("tcping call failed for %s: %s", host, str(e))
     return None
 
+
 def write_csv(timestamp: str, results: List[Tuple[str, Optional[float]]]) -> None:
     new_file = not os.path.exists(CSV_FILE)
     with open(CSV_FILE, "a", newline="") as f:
         writer = csv.writer(f)
         if new_file:
             writer.writerow(["timestamp"] + [host for host, _ in results])
-        writer.writerow([timestamp] + [str(latency) if latency is not None else "fail" for _, latency in results])
+        writer.writerow(
+            [timestamp]
+            + [str(latency) if latency is not None else "fail" for _, latency in results]
+        )
+
 
 def main():
     args = parse_args()
@@ -94,6 +111,7 @@ def main():
     except KeyboardInterrupt:
         logger.info("Shutting down TCP Ping Monitor.")
         sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

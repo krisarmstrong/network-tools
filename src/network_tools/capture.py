@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 import time
 from pathlib import Path
-from typing import Callable, Dict, Optional
+from typing import Dict, Optional
 
 # Destination MACs for common discovery protocols
 PROTO_MAP = {
@@ -23,7 +23,9 @@ def _scapy():  # pragma: no cover - heavy dependency
         from scapy.packet import Packet, Raw
         from scapy.contrib.lldp import LLDPDU
     except Exception as exc:
-        raise RuntimeError("scapy is required for capture operations. Install network-tools with its default dependencies.") from exc
+        raise RuntimeError(
+            "scapy is required for capture operations. Install network-tools with its default dependencies."
+        ) from exc
 
     return sniff, rdpcap, Dot3, SNAP, Packet, LLDPDU, Raw
 
@@ -46,7 +48,9 @@ def parse_packet(pkt) -> Optional[Dict[str, str]]:  # pragma: no cover (requires
     return record
 
 
-def listen(interface: str, output: Path, daemon: bool = False) -> None:  # pragma: no cover - requires root
+def listen(
+    interface: str, output: Path, daemon: bool = False
+) -> None:  # pragma: no cover - requires root
     sniff, rdpcap, Dot3, SNAP, Packet, LLDPDU, Raw = _scapy()
 
     def handler(pkt):

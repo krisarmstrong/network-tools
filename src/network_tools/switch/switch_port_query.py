@@ -21,13 +21,20 @@ from logging.handlers import RotatingFileHandler
 # ────────────────────────────────────────────────
 try:
     from pysnmp.hlapi import (  # type: ignore
-        SnmpEngine, CommunityData, UdpTransportTarget, ContextData,
-        ObjectType, ObjectIdentity, getCmd
+        SnmpEngine,
+        CommunityData,
+        UdpTransportTarget,
+        ContextData,
+        ObjectType,
+        ObjectIdentity,
+        getCmd,
     )
 except ImportError:
     # allow import of cmd_find even if pysnmp is missing
     SnmpEngine = CommunityData = UdpTransportTarget = ContextData = (
-        ObjectType, ObjectIdentity, getCmd
+        ObjectType,
+        ObjectIdentity,
+        getCmd,
     ) = None
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -52,8 +59,7 @@ def setup_logging(verbose: bool, logfile: str) -> None:
     """
     level = logging.DEBUG if verbose else logging.INFO
     handler = RotatingFileHandler(logfile, maxBytes=1_000_000, backupCount=3)
-    formatter = logging.Formatter(
-        "%(asctime)s %(levelname)s [%(name)s] %(message)s")
+    formatter = logging.Formatter("%(asctime)s %(levelname)s [%(name)s] %(message)s")
     handler.setFormatter(formatter)
 
     root = logging.getLogger()
@@ -63,7 +69,7 @@ def setup_logging(verbose: bool, logfile: str) -> None:
 
 def handle_exceptions(func, args, logger, verbose: bool) -> int:
     """
-    Handle exceptions for CLI commands, logging errors, and returning 
+    Handle exceptions for CLI commands, logging errors, and returning
     appropriate exit codes.
 
     Args:
@@ -85,9 +91,7 @@ def handle_exceptions(func, args, logger, verbose: bool) -> int:
         return 1
 
 
-def handle_snmp_error(
-        error_indication, error_status, error_index, target_ip: str
-) -> None:
+def handle_snmp_error(error_indication, error_status, error_index, target_ip: str) -> None:
     """
     Handle SNMP errors and raise appropriate exceptions.
 
@@ -107,14 +111,10 @@ def handle_snmp_error(
             raise TimeoutError(f"SNMP timeout for {target_ip}")
         raise ConnectionError(f"SNMP connection error: {error_indication}")
     if error_status:
-        raise RuntimeError(
-            f"SNMP error: {error_status.prettyPrint()} at var {error_index}"
-        )
+        raise RuntimeError(f"SNMP error: {error_status.prettyPrint()} at var {error_index}")
 
 
-def snmp_get(
-        engine: SnmpEngine, target_ip: str, community: str, *oids: ObjectType
-) -> list:
+def snmp_get(engine: SnmpEngine, target_ip: str, community: str, *oids: ObjectType) -> list:
     """
     Perform an SNMP GET request for the given OIDs.
 
@@ -173,10 +173,10 @@ def get_num_interfaces(engine: SnmpEngine, target_ip: str, community: str) -> in
 
 
 def get_interface_status(
-        engine: SnmpEngine,
-        target_ip: str,
-        community: str,
-        interface_index: int,
+    engine: SnmpEngine,
+    target_ip: str,
+    community: str,
+    interface_index: int,
 ) -> tuple[str, str]:
     """
     Retrieve admin and oper status for a given interface index.
@@ -250,15 +250,12 @@ def cmd_status(args: argparse.Namespace) -> int:
         print(f"Host: {host} ({count} interfaces)")
         for idx in range(1, count + 1):
             try:
-                admin, oper = get_interface_status(
-                    engine, host, args.username, idx)
+                admin, oper = get_interface_status(engine, host, args.username, idx)
                 print(f"  Interface {idx}: Admin={admin}, Oper={oper}")  # noqa
             except (ConnectionError, TimeoutError) as e:
                 log_snmp_error(logger, host, idx, e)
             except RuntimeError as e:
-                logger.error(
-                    "Error retrieving status for %s interface %d: %s", host, idx, e
-                )
+                logger.error("Error retrieving status for %s interface %d: %s", host, idx, e)
     return 0
 
 
@@ -310,22 +307,19 @@ def interactive_mode(verbose: bool, logfile: str) -> argparse.Namespace:
         if not cmd:
             print("Command cannot be empty.")
     if cmd == "status":
-        hosts_input = input(
-            "Enter host IPs or hostnames (space-separated): ").strip()
+        hosts_input = input("Enter host IPs or hostnames (space-separated): ").strip()
         if not hosts_input:
             print("Hosts cannot be empty. Using default: 127.0.0.1")
             hosts = ["127.0.0.1"]
         else:
             hosts = hosts_input.split()
             # Validate IP/hostname format
-            ip_pattern = re.compile(
-                r"^(?:\d{1,3}\.){3}\d{1,3}$|^[a-zA-Z0-9.-]+$")
+            ip_pattern = re.compile(r"^(?:\d{1,3}\.){3}\d{1,3}$|^[a-zA-Z0-9.-]+$")
             hosts = [h for h in hosts if ip_pattern.match(h)]
             if not hosts:
                 print("No valid IPs/hostnames. Using default: 127.0.0.1")
                 hosts = ["127.0.0.1"]
-        community = input(
-            "SNMP community string [public]: ").strip() or "public"
+        community = input("SNMP community string [public]: ").strip() or "public"
         return argparse.Namespace(
             command="status",
             hosts=hosts,
@@ -351,10 +345,10 @@ def interactive_mode(verbose: bool, logfile: str) -> argparse.Namespace:
 
 
 def setup_subparser(
-        subparsers: argparse._SubParsersAction,  # type: ignore
-        name: str,
-        help_text: str,
-        args: list[tuple[str, dict]],
+    subparsers: argparse._SubParsersAction,  # type: ignore
+    name: str,
+    help_text: str,
+    args: list[tuple[str, dict]],
 ) -> None:
     """
     Set up a subparser with the given arguments.
@@ -382,9 +376,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="SwitchPortQuery CLI: 'status' and 'find' operations"
     )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true", help="Enable debug logging"
-    )
+    parser.add_argument("--verbose", "-v", action="store_true", help="Enable debug logging")
     parser.add_argument(
         "--logfile",
         default="switch_port_query.log",

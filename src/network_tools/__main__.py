@@ -17,16 +17,24 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    listen_parser = subparsers.add_parser("listen", help="Capture discovery protocols live or from PCAP.")
+    listen_parser = subparsers.add_parser(
+        "listen", help="Capture discovery protocols live or from PCAP."
+    )
     listen_parser.add_argument("--interface", help="Interface to sniff (live mode).")
-    listen_parser.add_argument("--pcap", type=Path, help="Read packets from a pcap file instead of live capture.")
+    listen_parser.add_argument(
+        "--pcap", type=Path, help="Read packets from a pcap file instead of live capture."
+    )
     listen_parser.add_argument("--output", type=Path, default=Path("discovery_log.txt"))
     listen_parser.add_argument("--daemon", action="store_true", help="Suppress console messages.")
 
-    json_parser_cmd = subparsers.add_parser("parse-json", help="Parse NetAlly discovery.json host data.")
+    json_parser_cmd = subparsers.add_parser(
+        "parse-json", help="Parse NetAlly discovery.json host data."
+    )
     json_parser_cmd.add_argument("input", type=Path)
 
-    filter_parser = subparsers.add_parser("filter-pcap", help="Filter pcaps for NetAlly reflector traffic.")
+    filter_parser = subparsers.add_parser(
+        "filter-pcap", help="Filter pcaps for NetAlly reflector traffic."
+    )
     filter_parser.add_argument("input", type=Path)
     filter_parser.add_argument("output", type=Path)
 
@@ -63,7 +71,9 @@ def setup_logging(verbose: bool, logfile: Path | None) -> None:
     handlers = [logging.StreamHandler(sys.stdout)]
     if logfile:
         handlers.append(logging.FileHandler(logfile))
-    logging.basicConfig(level=level, handlers=handlers, format="%(asctime)s [%(levelname)s] %(message)s")
+    logging.basicConfig(
+        level=level, handlers=handlers, format="%(asctime)s [%(levelname)s] %(message)s"
+    )
 
 
 if __name__ == "__main__":

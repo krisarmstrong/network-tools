@@ -1,4 +1,6 @@
 # network-tools
+[![Checks](https://github.com/krisarmstrong/network-tools/actions/workflows/checks.yml/badge.svg)](https://github.com/krisarmstrong/network-tools/actions/workflows/checks.yml)
+
 
 [![CI](https://github.com/krisarmstrong/network-tools/workflows/CI/badge.svg)](https://github.com/krisarmstrong/network-tools/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -89,3 +91,12 @@ Enhanced from:
 - wi-fi-packet-parser
 - switch-port-query
 - tping-monitor
+
+## Development
+
+Run the full local checks:
+
+```bash
+./check.sh
+```
+

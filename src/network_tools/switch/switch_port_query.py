@@ -9,13 +9,13 @@ Author: Kris Sales
 """
 from __future__ import annotations
 
-__version__ = "1.1.0"
-
 import argparse
 import logging
-import sys
 import re
+import sys
 from logging.handlers import RotatingFileHandler
+
+from network_tools._version import version as __version__
 
 # ─── SNMP IMPORTS ───────────────────────────────
 # ────────────────────────────────────────────────
@@ -376,6 +376,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="SwitchPortQuery CLI: 'status' and 'find' operations"
     )
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable debug logging")
     parser.add_argument(
         "--logfile",

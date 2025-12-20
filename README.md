@@ -42,8 +42,8 @@ pip install -e .[test]
 python -m pytest
 ```
 
-The repo ships with `nox -s tests` and `.github/workflows/ci.yml`; versions are derived from annotated git tags via
-`setuptools_scm`.
+The repo ships with `nox -s tests` and `.github/workflows/ci.yml`; versions are stored in `pyproject.toml` and
+release-please manages tags and changelog entries.
 
 ## Packet Performance Listener
 The original C-based high-performance listener from `packet_listener_linux_perf_test` is preserved under
@@ -99,4 +99,3 @@ Run the full local checks:
 ```bash
 ./check.sh
 ```
-

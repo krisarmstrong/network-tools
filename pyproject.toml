@@ -1,5 +1,6 @@
 [project]
 name = "network-tools"
+version = "2.0.3"
 description = "Unified toolkit for NetAlly/Layer2 discovery capture, JSON parsing, and PCAP filtering."
 authors = [
     { name = "Kris Armstrong", email = "kris.armstrong@example.com" }
@@ -17,9 +18,8 @@ classifiers = [
 dependencies = [
     "rich>=13.7",
     "scapy>=2.5",
+    "tomli>=2.0; python_version<'3.11'",
 ]
-
-dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
@@ -39,15 +39,11 @@ Homepage = "https://github.com/krisarmstrong/network-tools"
 network-tools = "network_tools.__main__:main"
 
 [build-system]
-requires = ["setuptools>=68", "setuptools_scm>=8"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.setuptools_scm]
-version_file = "src/network_tools/_version.py"
-fallback_version = "0.0.0"
 
 [tool.pytest.ini_options]
 addopts = "-ra --showlocals"

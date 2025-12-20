@@ -7,7 +7,6 @@ or the third-party 'tcping' tool. Results are logged over time for trend analysi
 
 Author: Your Name
 """
-__version__ = "1.1.0"
 
 import argparse
 import csv
@@ -20,6 +19,8 @@ import time
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from typing import List, Tuple, Optional
+
+from network_tools._version import version as __version__
 
 # Constants
 LOG_FILE = "tcping_monitor.log"
@@ -38,6 +39,7 @@ logger.addHandler(handler)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Monitor TCP response times to specified hosts.")
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     parser.add_argument(
         "--method",
         choices=["python", "tcping"],

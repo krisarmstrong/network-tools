@@ -1,6 +1,6 @@
 [project]
 name = "network-tools"
-version = "2.0.3"
+version = "0.1.0"
 description = "Unified toolkit for NetAlly/Layer2 discovery capture, JSON parsing, and PCAP filtering."
 authors = [
     { name = "Kris Armstrong", email = "kris.armstrong@example.com" }

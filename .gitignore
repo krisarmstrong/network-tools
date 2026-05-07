@@ -1,9 +1,28 @@
-# Python
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║ Network Tools - .gitignore                                                ║
+# ╠═══════════════════════════════════════════════════════════════════════════╣
+# ║ Collection of network diagnostic and utility tools                        ║
+# ║ Stack: Python 3.x, C/C++, packet capture                                 ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+# ─── Python Core ─────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
+
+# ─── Virtual Environments ────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
 .Python
+
+# ─── Distribution & Packaging ────────────────────────────────────────────────
 build/
 develop-eggs/
 dist/
@@ -20,36 +39,56 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# ─── Testing & Coverage ──────────────────────────────────────────────────────
 .pytest_cache/
 .coverage
 .coverage.*
+coverage.xml
 htmlcov/
 .tox/
 .nox/
-.venv/
-venv/
-ENV/
-env/
+.hypothesis/
 
-# Network captures
+# ─── Type Checking & Linting ─────────────────────────────────────────────────
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# ─── C/C++ Build Artifacts ───────────────────────────────────────────────────
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.dll
+
+# ─── Network Captures ────────────────────────────────────────────────────────
+# Packet captures (can be large and contain sensitive data)
 *.pcap
 *.pcapng
 *.cap
+captures/
+pcap_files/
 
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Logs
-*.log
-
-# Tooling defaults
+# ─── Environment & Secrets ───────────────────────────────────────────────────
 .env
 .env.*
-.mypy_cache/
-.ruff_cache/
-coverage.xml
+.env.local
+
+# Network credentials
+*.credentials
+network_passwords.txt
+
+# ─── Logs ────────────────────────────────────────────────────────────────────
+*.log
+network_*.log
+
+# ─── Temporary Files ─────────────────────────────────────────────────────────
+*.tmp
+*.temp
+*~
+*.swp
+*.swo

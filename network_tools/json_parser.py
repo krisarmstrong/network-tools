@@ -5,12 +5,12 @@ from __future__ import annotations
 import ipaddress
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 SENSITIVE_PATTERNS = ["api_key", "password"]
 
 
-def load_hosts(path: Path) -> List[Dict[str, Any]]:
+def load_hosts(path: Path) -> list[dict[str, Any]]:
     data = json.loads(path.read_text(encoding="utf-8"))
     detail = data.get("Detail") or {}
     hosts = detail.get("host_list")
@@ -24,7 +24,7 @@ def contains_sensitive_text(path: Path) -> bool:
     return any(marker in payload for marker in SENSITIVE_PATTERNS)
 
 
-def count_valid_ipv4(hosts: List[Dict[str, Any]]) -> int:
+def count_valid_ipv4(hosts: list[dict[str, Any]]) -> int:
     count = 0
     for host in hosts:
         ip_addr = (host.get("host") or {}).get("ip_v4_address")
@@ -37,7 +37,7 @@ def count_valid_ipv4(hosts: List[Dict[str, Any]]) -> int:
     return count
 
 
-def format_host(host: Dict[str, Any], index: int) -> str:
+def format_host(host: dict[str, Any], index: int) -> str:
     data = host.get("host", {})
     lines = [f"Host {index}:"]
     for field in (

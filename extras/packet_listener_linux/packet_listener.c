@@ -1,18 +1,18 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <errno.h>
 #include <linux/if_ether.h>
 #include <linux/if_packet.h>
 #include <net/ethernet.h>
-#include <arpa/inet.h>
 #include <net/if.h>
-#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/epoll.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <time.h>
 #include <unistd.h>
-#include <errno.h>
 
 const uint8_t TARGET_MAC_PREFIX[] = {0x00, 0xc0, 0x17};
 #define TARGET_MAC_PREFIX_LEN 3
@@ -51,11 +51,11 @@ void print_stats() {
     for (int i = 0; i < 10 && stats[i].packet_size != 0; i++) {
         double pps = stats[i].count / elapsed;
         double throughput = (stats[i].bytes * 8) / elapsed;
-        printf("Size %zu bytes: %zu packets, %.2f PPS, %.2f bps\n",
-               stats[i].packet_size, stats[i].count, pps, throughput);
+        printf("Size %zu bytes: %zu packets, %.2f PPS, %.2f bps\n", stats[i].packet_size,
+               stats[i].count, pps, throughput);
     }
-    printf("Total: %zu packets, %.2f PPS, %.2f bps\n",
-           total_count, total_count / elapsed, (total_bytes * 8) / elapsed);
+    printf("Total: %zu packets, %.2f PPS, %.2f bps\n", total_count, total_count / elapsed,
+           (total_bytes * 8) / elapsed);
     fflush(stdout);
 }
 

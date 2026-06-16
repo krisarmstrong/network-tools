@@ -2,11 +2,12 @@
 """
 Project Title: SwitchPortQuery
 
-A CLI tool to retrieve switchport status across multiple devices and search specific switchport entries,  # noqa
-with both command-line and interactive modes.
+A CLI tool to retrieve switchport status across multiple devices,
+search switchport entries, and support command-line and interactive modes.
 
 Author: Kris Sales
 """
+
 from __future__ import annotations
 
 import argparse
@@ -14,6 +15,7 @@ import logging
 import re
 import sys
 from logging.handlers import RotatingFileHandler
+from typing import ClassVar
 
 from network_tools._version import version as __version__
 
@@ -21,20 +23,22 @@ from network_tools._version import version as __version__
 # ────────────────────────────────────────────────
 try:
     from pysnmp.hlapi import (  # type: ignore
-        SnmpEngine,
         CommunityData,
-        UdpTransportTarget,
         ContextData,
-        ObjectType,
         ObjectIdentity,
-        getCmd,
+        ObjectType,
+        SnmpEngine,
+        UdpTransportTarget,
+    )
+    from pysnmp.hlapi import (
+        getCmd as get_cmd,
     )
 except ImportError:
     # allow import of cmd_find even if pysnmp is missing
     SnmpEngine = CommunityData = UdpTransportTarget = ContextData = (
         ObjectType,
         ObjectIdentity,
-        getCmd,
+        get_cmd,
     ) = None
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -42,7 +46,7 @@ except ImportError:
 class Config:
     """Global constants for SwitchPortQuery."""
 
-    STATUS_MAP: dict[int, str] = {
+    STATUS_MAP: ClassVar[dict[int, str]] = {
         1: "up",
         2: "down",
         3: "testing",
@@ -133,7 +137,7 @@ def snmp_get(engine: SnmpEngine, target_ip: str, community: str, *oids: ObjectTy
         RuntimeError: On other SNMP errors.
     """
     error_indication, error_status, error_index, var_binds = next(
-        getCmd(
+        get_cmd(
             engine,
             CommunityData(community),
             UdpTransportTarget((target_ip, 161), timeout=2, retries=1),
@@ -204,8 +208,8 @@ def get_interface_status(
     )
     admin_val = int(var_binds[0][1])
     oper_val = int(var_binds[1][1])
-    admin_str = Config.STATUS_MAP.get(admin_val, str(admin_val))  # noqa
-    oper_str = Config.STATUS_MAP.get(oper_val, str(oper_val))  # noqa
+    admin_str = Config.STATUS_MAP.get(admin_val, str(admin_val))
+    oper_str = Config.STATUS_MAP.get(oper_val, str(oper_val))
     return admin_str, oper_str
 
 
@@ -251,7 +255,7 @@ def cmd_status(args: argparse.Namespace) -> int:
         for idx in range(1, count + 1):
             try:
                 admin, oper = get_interface_status(engine, host, args.username, idx)
-                print(f"  Interface {idx}: Admin={admin}, Oper={oper}")  # noqa
+                print(f"  Interface {idx}: Admin={admin}, Oper={oper}")
             except (ConnectionError, TimeoutError) as e:
                 log_snmp_error(logger, host, idx, e)
             except RuntimeError as e:
@@ -279,13 +283,13 @@ def cmd_find(args: argparse.Namespace) -> int:
     except PermissionError:
         logger.error("Permission denied for file: %s", args.input_file)
         return 1
-    print(f"Searching for '{args.search}' in {args.input_file}...")  # noqa
+    print(f"Searching for '{args.search}' in {args.input_file}...")
     matches = [line.rstrip() for line in lines if args.search in line]
     if not matches:
         print("No matches found.")
     else:
         for m in matches:
-            print(m)  # noqa
+            print(m)
     return 0
 
 
@@ -327,7 +331,7 @@ def interactive_mode(verbose: bool, logfile: str) -> argparse.Namespace:
             verbose=verbose,
             logfile=logfile,
         )
-    infile = input("Enter path to switchport output file: ").strip()  # noqa
+    infile = input("Enter path to switchport output file: ").strip()
     if not infile:
         print("Input file cannot be empty.")
         infile = "output.txt"
@@ -396,7 +400,7 @@ def main() -> None:
     setup_subparser(
         subparsers,
         "status",
-        "Retrieve switchport status from devices",  # noqa
+        "Retrieve switchport status from devices",
         [
             (
                 "--hosts",
@@ -420,11 +424,11 @@ def main() -> None:
     setup_subparser(
         subparsers,
         "find",
-        "Find specific switchport entries",  # noqa
+        "Find specific switchport entries",
         [
             (
                 "--input-file",
-                {"help": "Path to switchport output file", "required": False},  # noqa
+                {"help": "Path to switchport output file", "required": False},
             ),
             (
                 "--search",

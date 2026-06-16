@@ -1,0 +1,11 @@
+---
+# clang-format configuration for C23 (NOT C++)
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+PointerAlignment: Right
+QualifierAlignment: Leave
+SortIncludes: CaseSensitive
+InsertNewlineAtEOF: true

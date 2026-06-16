@@ -9,4 +9,4 @@ try:  # pragma: no cover
 except ImportError:  # pragma: no cover
     __version__ = "0.0.0"
 
-__all__ = ["capture", "json_parser", "pcap_filter", "__version__"]
+__all__ = ["__version__", "capture", "json_parser", "pcap_filter"]

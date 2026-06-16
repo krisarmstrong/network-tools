@@ -12,13 +12,13 @@ import argparse
 import csv
 import logging
 import os
+import shutil
 import socket
 import subprocess
 import sys
 import time
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
-from typing import List, Tuple, Optional
 
 from network_tools._version import version as __version__
 
@@ -52,20 +52,24 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def check_tcp_python(host: str, port: int = 80, timeout: float = 3.0) -> Optional[float]:
+def check_tcp_python(host: str, port: int = 80, timeout: float = 3.0) -> float | None:
     start = time.time()
     try:
         with socket.create_connection((host, port), timeout):
             return round(time.time() - start, 3)
-    except (socket.timeout, ConnectionRefusedError, socket.gaierror) as e:
+    except (TimeoutError, ConnectionRefusedError, socket.gaierror) as e:
         logger.error("Python TCP check failed for %s: %s", host, str(e))
         return None
 
 
-def check_tcp_tcping(host: str) -> Optional[float]:
+def check_tcp_tcping(host: str) -> float | None:
+    tcping = shutil.which("tcping")
+    if tcping is None:
+        logger.error("tcping executable not found")
+        return None
     try:
         result = subprocess.run(
-            ["tcping", host, "-n", "1"], capture_output=True, text=True, timeout=10
+            [tcping, host, "-n", "1"], capture_output=True, text=True, timeout=10
         )
         if result.returncode == 0 and "time=" in result.stdout:
             for line in result.stdout.splitlines():
@@ -76,7 +80,7 @@ def check_tcp_tcping(host: str) -> Optional[float]:
     return None
 
 
-def write_csv(timestamp: str, results: List[Tuple[str, Optional[float]]]) -> None:
+def write_csv(timestamp: str, results: list[tuple[str, float | None]]) -> None:
     new_file = not os.path.exists(CSV_FILE)
     with open(CSV_FILE, "a", newline="") as f:
         writer = csv.writer(f)

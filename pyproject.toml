@@ -16,7 +16,7 @@ classifiers = [
     "Topic :: System :: Networking",
 ]
 dependencies = [
-    "rich>=13.7",
+    "rich>=15.0.0",
     "scapy>=2.8.0",
     "tomli>=2.0; python_version<'3.11'",
 ]
